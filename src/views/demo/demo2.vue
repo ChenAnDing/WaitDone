@@ -36,5 +36,5 @@ $color: darkcyan;
       background: $color;
     }
   }
-  
+
 </style>
