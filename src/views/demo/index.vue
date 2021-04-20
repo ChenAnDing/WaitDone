@@ -1,7 +1,7 @@
 <template>
   <div class="page">
-    <div class="swiper" ref="swiper">
-      <div class="bottombtn" @touchstart="touchStart" @touchend="touchEnd" @touchmove="touchMove"></div>
+    <div class="swiper" ref="swiper" :style="{'top': movePointY + 'px'}">
+      <div class="bottombtn" ref="moveDom" @touchstart="touchStart" @touchend="touchEnd" @touchmove="touchMove"></div>
       <div class="cal">
         <div>{{year}}-{{month}}-{{day}}</div>
         <div class="dateTar">
@@ -65,17 +65,23 @@ export default {
     },
     touchMove(e) {
       let nowMovePointY = e.touches[0].clientY
-      // console.log(e.touches[0])
-      // if (parseInt(this.$refs.swiper.style.top) > 0) {
-      //   return
+      let mp = this.startPointY - nowMovePointY
+      
+      // console.log(mp, 77)
+      
+      let moveDomHei = this.$refs.moveDom.offsetHeight
+      let mainDomHei = this.$refs.swiper.offsetHeight
+      // console.log(this.$refs.moveDom.offsetHeight,this.$refs.moveDom.style.height, 99)
+      let canMoveHeight = mainDomHei - moveDomHei
+      // if (mp >= canMoveHeight) {
+      //   mp = canMoveHeight
       // }
-      this.movePointY = this.startPointY - nowMovePointY
-      if(this.movePointY == 0) {
-        return
-      }
-      this.$refs.swiper.style.top = - this.movePointY + 'px'
-      // console.log(this.movePointY)
-
+      // 不允许下拉超过顶部为0的临界值
+      // if(mp <= 0) {
+      //   mp = 0
+      // }
+      this.movePointY = this.movePointY - mp
+      console.log(this.movePointY)
     },
     selectDay(item, index) {
       let days = this.getMonthDays(this.year, this.month)
